@@ -1,0 +1,2 @@
+MKL25Z128xxx4_Elevator.cpp:58:13:void lpsci_task(void*)	152	static
+MKL25Z128xxx4_Elevator.cpp:105:5:int main()	16	static

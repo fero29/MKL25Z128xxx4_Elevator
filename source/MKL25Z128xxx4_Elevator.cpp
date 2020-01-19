@@ -40,8 +40,64 @@
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
 /* TODO: insert other include files here. */
+#include <Myuart.h>
 
 /* TODO: insert other definitions and declarations here. */
+
+const char *to_send = "FreeRTOS LPSCI driver example!\r\n";
+const char *send_ring_overrun = "\r\nRing buffer overrun!\r\n";
+const char *send_hardware_overrun = "\r\nHardware buffer overrun!\r\n";
+
+
+static void lpsci_task(void *pvParameters);
+
+
+/*!
+ * @brief Task responsible for printing of "Hello world." message.
+ */
+static void lpsci_task(void *pvParameters)
+{
+    int error;
+    size_t n;
+    My_uart uart = My_uart();
+
+    if(0 > uart.uart_send((uint8_t *)to_send, strlen(to_send)))
+    {
+       vTaskSuspend(NULL);
+    }
+
+    /* Send data */
+    do
+    {
+    	error = uart.uart_receive(uart.lpsci_recv_buffer, LPSCI_RECV_BUFFER_SIZE, &n);
+        if (error == kStatus_LPSCI_RxHardwareOverrun)
+        {
+            /* Notify about hardware buffer overrun */
+            if (kStatus_Success !=
+            		uart.uart_send((uint8_t *)send_hardware_overrun, strlen(send_hardware_overrun)))
+                //LPSCI_RTOS_Send(&handle, (uint8_t *)send_hardware_overrun, strlen(send_hardware_overrun)))
+            {
+                vTaskSuspend(NULL);
+            }
+        }
+        if (error == kStatus_LPSCI_RxRingBufferOverrun)
+        {
+            /* Notify about ring buffer overrun */
+            if (kStatus_Success != uart.uart_send((uint8_t *)send_ring_overrun, strlen(send_ring_overrun)))
+            {
+                vTaskSuspend(NULL);
+            }
+        }
+
+        if (n > 0)
+        {
+            /* send back the received data */
+        	uart.uart_send((uint8_t *)uart.lpsci_recv_buffer, n);
+        }
+    } while (kStatus_Success == error);
+
+    vTaskSuspend(NULL);
+}
 
 /*
  * @brief   Application entry point.
@@ -55,8 +111,14 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    PRINTF("Hello World\n");
+    printf("Hello World\n");
 
+
+
+
+    xTaskCreate(lpsci_task, "Uart_task", configMINIMAL_STACK_SIZE, NULL, lpsci_task_PRIORITY, NULL);
+
+    vTaskStartScheduler();
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
