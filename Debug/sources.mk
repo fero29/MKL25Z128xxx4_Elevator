@@ -30,7 +30,7 @@ board \
 drivers \
 freertos \
 source \
-source/Nový\ priečinok \
+source/Ringbuffer \
 startup \
 utilities \
 

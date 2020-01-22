@@ -1,4 +1,3 @@
-
 /*
  * RingBufferWrapper.h
  *
@@ -8,7 +7,7 @@
 
 #ifndef RINGBUFFERWRAPPER_H_
 #define RINGBUFFERWRAPPER_H_
-#include <RingBuffer.h>
+#include <Ringbuffer/RingBuffer.h>
 
 
 class RingBufferWrapper {

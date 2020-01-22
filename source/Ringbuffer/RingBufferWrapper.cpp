@@ -5,7 +5,7 @@
  *      Author: hudik3
  */
 
-#include <RingBufferWrapper.h>
+#include <Ringbuffer/RingBufferWrapper.h>
 
 RingBufferWrapper::RingBufferWrapper(uint8_t *buf, size_t count) {
 	RbufferInit(&handler, buf, count);

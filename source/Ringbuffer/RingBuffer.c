@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 #include <assert.h>
-#include <RingBuffer.h>
+#include <Ringbuffer/RingBuffer.h>
 
 /*! Private function for incrementing ring buffer pointer address */
 /*  increment_address_one = (address + 1) % Length*/
