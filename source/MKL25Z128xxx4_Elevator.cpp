@@ -60,7 +60,9 @@
 uint8_t g_tipString[] =
 		"LPSCI functional API interrupt example\r\nBoard receives characters then sends them out\r\nNow please input:\r\n";
 
-volatile bool new_line_flag = false;
+volatile bool ready_to_send = false;
+volatile bool readed_data = false;
+volatile uint8_t idle = 0;
 
 //buffer_t rxBuffer_handler;
 //buffer_t txBuffer_handler;
@@ -70,6 +72,9 @@ uint8_t txBufferData[100];
 /* Setup RingBuffers */
 RingBufferWrapper ringBuffRx(rxBufferData,sizeof(rxBufferData));
 RingBufferWrapper ringBuffTx(txBufferData,sizeof(txBufferData));
+
+//LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
+//LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
 
 
 
@@ -133,24 +138,38 @@ uint8_t get_crc8(const uint8_t * data, const uint8_t size)
 
 
 
-
-
 extern "C" void DEMO_LPSCI_IRQHandler(void)
 {
 
-	uint8_t data;
+	//uint8_t data;
+	uint32_t status_flags = LPSCI_GetStatusFlags(DEMO_LPSCI);
 
-	/* If new data arrived. */
-	if ((kLPSCI_RxDataRegFullFlag) & LPSCI_GetStatusFlags(DEMO_LPSCI)) {
-		data = LPSCI_ReadByte(DEMO_LPSCI);
-		if (data == '\r' || data == '\n')
+	DisableIRQ(DEMO_LPSCI_IRQn);
+
+	if(status_flags & kLPSCI_IdleLineFlag && !(kLPSCI_RxDataRegFullFlag & status_flags))
 		{
-			new_line_flag = true;
+			LPSCI_ClearStatusFlags(UART0, kLPSCI_IdleLineFlag);
+			idle++;
+			if(idle > 0)
+			{
+				if(ringBuffRx.NumOfElements() > 3)
+				{
+					readed_data = true;
+				}
+				LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
+				idle = 0;
+			}
 		}
 
-		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxDataRegFullFlag);
 
-		//ringBuffRx.Write(&data, 1);
+	if (kLPSCI_RxDataRegFullFlag & status_flags)
+	{
+		if(DEMO_LPSCI->S1 & UART0_S1_RDRF_MASK)
+		{
+			//printf("new data\n");
+			ringBuffRx.Write((uint8_t*)&DEMO_LPSCI->D, sizeof(DEMO_LPSCI->D));
+			LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
+		}
 	}
 
 
@@ -158,16 +177,30 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 
 
 
+
 	/*If there are data to send*/
-//	if ((kLPSCI_TxDataRegEmptyFlag & LPSCI_GetStatusFlags(DEMO_LPSCI))) {
+//	if (kLPSCI_TxDataRegEmptyFlag & status_flags) {
 //		ringBuffTx.Read(&data, 1);
-//		LPSCI_WriteByte(DEMO_LPSCI, data);
+
+		//LPSCI_WriteByte(DEMO_LPSCI, data);
 
 		/* Disable TX interrupt If there are NO data to send */
 //		if (ringBuffTx.NumOfElements() == 0)
 //			LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_TxDataRegEmptyInterruptEnable);
 //	}
 
+
+
+
+
+	if(status_flags & kLPSCI_RxOverrunFlag)
+	{
+		//printf("kLPSCI_RxOverrunFlag\n");
+		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxOverrunFlag);
+	}
+
+
+	EnableIRQ(DEMO_LPSCI_IRQn);
 }
 
 /*
@@ -186,7 +219,7 @@ int main(void) {
 
 	uint8_t d[2] = {0x0, 0xC2};
 	uint8_t crc = get_crc8(d, 2);
-	printf("crc = %x", crc);
+	printf("crc = %x\n", crc);
 
 
 
@@ -211,23 +244,65 @@ int main(void) {
 
 
 
+
+
+
+
+
+
+
+
+
+
 	/* Enable RX interrupt. */
+
 	LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_RxDataRegFullInterruptEnable);
 	EnableIRQ(DEMO_LPSCI_IRQn);
 
 	while (1) {
 
 		// Wait for new line
-		while (!new_line_flag) {
-		};
+		//while (!new_line_flag)
+		//{};
+		//new_line_flag = false; /* Clear new line flag */
 
-		new_line_flag = false; /* Clear new line flag */
+		if(readed_data)
+		{
+
+			static uint8_t buf[255];
+			int8_t count = ringBuffRx.NumOfElements();
+			DisableIRQ(DEMO_LPSCI_IRQn);
+			ringBuffRx.Read(buf, count);
+
+			//printf("data: ");
+			//for(int i = 0; i < count; i++ )
+			//{
+			//	printf("0x%x ", buf[i]);
+			//}
+			//printf("\n----\n");
+
+
+			if(count == 5)
+			{
+				uint8_t cr [2] = {buf[1], buf[2]};
+				if(get_crc8(cr, 2) == buf[4])
+				{
+
+				}
+			}
+
+
+			readed_data = false;
+			EnableIRQ(DEMO_LPSCI_IRQn);
+		}
+
+
 
 
 		/* Copy data  from rxBuffer to txbuffer*/
-		uint16_t count = ringBuffRx.NumOfElements();
-		uint8_t buffer[count];
-		ringBuffRx.Read( buffer, count);
+		//uint16_t count = ringBuffRx.NumOfElements();
+		//uint8_t buffer[count];
+		//ringBuffRx.Read( buffer, count);
 
 
 		/* Write new line to txHandler and enable Tx interrupt*/
