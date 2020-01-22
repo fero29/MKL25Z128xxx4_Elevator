@@ -1,5 +1,7 @@
-Myuart.cpp:13:1:My_uart::My_uart()	24	static
+Myuart.cpp:14:1:My_uart::My_uart()	24	static
 Myuart.cpp:32:1:My_uart::~My_uart()	16	static
 Myuart.cpp:32:1:virtual My_uart::~My_uart()	16	static
-Myuart.cpp:37:5:int My_uart::uart_send(const uint8_t*, uint32_t)	24	static
-Myuart.cpp:41:5:int My_uart::uart_receive(uint8_t*, uint32_t, size_t*)	24	static
+Myuart.cpp:36:6:void My_uart::uart_send(const uint8_t*, uint32_t)	32	static
+Myuart.cpp:46:8:size_t My_uart::uart_receive(uint8_t*, uint32_t)	32	static
+Myuart.cpp:70:6:void My_uart::reset_rx_events()	16	static
+Myuart.cpp:76:6:void My_uart::reset_tx_events()	16	static

@@ -303,7 +303,7 @@ int LPSCI_RTOS_Receive(lpsci_rtos_handle_t *handle, uint8_t *buffer, uint32_t le
 
     ev = xEventGroupWaitBits(handle->rxEvent,
                              RTOS_LPSCI_COMPLETE | RTOS_LPSCI_RING_BUFFER_OVERRUN | RTOS_LPSCI_HARDWARE_BUFFER_OVERRUN,
-                             pdTRUE, pdFALSE, portMAX_DELAY);
+                             pdTRUE, pdFALSE, /*portMAX_DELAY*/10);
     if (ev & RTOS_LPSCI_HARDWARE_BUFFER_OVERRUN)
     {
         /* Stop data transfer to application buffer, ring buffer is still active */

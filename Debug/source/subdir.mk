@@ -5,26 +5,29 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../source/MKL25Z128xxx4_Elevator.cpp \
-../source/Myuart.cpp \
+../source/RingBufferWrapper.cpp \
 ../source/cpp_config.cpp 
 
 C_SRCS += \
+../source/RingBuffer.c \
 ../source/mtb.c \
 ../source/semihost_hardfault.c 
 
 OBJS += \
 ./source/MKL25Z128xxx4_Elevator.o \
-./source/Myuart.o \
+./source/RingBuffer.o \
+./source/RingBufferWrapper.o \
 ./source/cpp_config.o \
 ./source/mtb.o \
 ./source/semihost_hardfault.o 
 
 CPP_DEPS += \
 ./source/MKL25Z128xxx4_Elevator.d \
-./source/Myuart.d \
+./source/RingBufferWrapper.d \
 ./source/cpp_config.d 
 
 C_DEPS += \
+./source/RingBuffer.d \
 ./source/mtb.d \
 ./source/semihost_hardfault.d 
 

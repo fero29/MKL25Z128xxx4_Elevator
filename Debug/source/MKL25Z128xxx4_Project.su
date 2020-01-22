@@ -1,0 +1,12 @@
+core_cm0plus.h:745:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
+fsl_common.h:212:20:void EnableIRQ(IRQn_Type)	16	static
+fsl_clock.h:620:20:void CLOCK_SetLpsci0Clock(uint32_t)	16	static
+fsl_lpsci.h:502:20:void LPSCI_WriteByte(UART0_Type*, uint8_t)	16	static
+fsl_lpsci.h:516:23:uint8_t LPSCI_ReadByte(UART0_Type*)	16	static
+MKL25Z128xxx4_Project.cpp:83:17:void UART0_IRQHandler()	16	static
+MKL25Z128xxx4_Project.cpp:113:5:int main()	80	dynamic
+RingBufferWrapperTemplate.h:16:2:RingBufferWrapperTemplate<COUNT>::RingBufferWrapperTemplate() [with int COUNT = 100]	16	static
+RingBufferWrapperTemplate.h:14:7:RingBufferWrapperTemplate<100>::~RingBufferWrapperTemplate()	16	static
+RingBufferWrapperTemplate.h:14:7:virtual RingBufferWrapperTemplate<100>::~RingBufferWrapperTemplate()	16	static
+MKL25Z128xxx4_Project.cpp:170:1:void __static_initialization_and_destruction_0(int, int)	16	static
+MKL25Z128xxx4_Project.cpp:170:1:cpp)	8	static

@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include utilities/subdir.mk
 -include startup/subdir.mk
+-include source/Nový\ priečinok/subdir.mk
 -include source/subdir.mk
 -include freertos/subdir.mk
 -include drivers/subdir.mk

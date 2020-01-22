@@ -30,6 +30,7 @@ board \
 drivers \
 freertos \
 source \
+source/Nový\ priečinok \
 startup \
 utilities \
 

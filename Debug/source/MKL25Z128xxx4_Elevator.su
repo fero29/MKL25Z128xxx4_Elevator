@@ -1,2 +1,9 @@
-MKL25Z128xxx4_Elevator.cpp:58:13:void lpsci_task(void*)	152	static
-MKL25Z128xxx4_Elevator.cpp:105:5:int main()	16	static
+core_cm0plus.h:745:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
+fsl_common.h:212:20:void EnableIRQ(IRQn_Type)	16	static
+fsl_clock.h:620:20:void CLOCK_SetLpsci0Clock(uint32_t)	16	static
+fsl_lpsci.h:502:20:void LPSCI_WriteByte(UART0_Type*, uint8_t)	16	static
+fsl_lpsci.h:516:23:uint8_t LPSCI_ReadByte(UART0_Type*)	16	static
+MKL25Z128xxx4_Elevator.cpp:80:17:void UART0_IRQHandler()	16	static
+MKL25Z128xxx4_Elevator.cpp:112:5:int main()	80	dynamic
+MKL25Z128xxx4_Elevator.cpp:169:1:void __static_initialization_and_destruction_0(int, int)	16	static
+MKL25Z128xxx4_Elevator.cpp:169:1:cpp)	8	static

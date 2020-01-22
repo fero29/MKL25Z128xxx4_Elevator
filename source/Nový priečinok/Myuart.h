@@ -15,28 +15,23 @@
 
 
 #define LPSCI0_BAUD_RATE 					115200
-#define LPSCI_BACKGROUND_BUFFER_SIZE		64
-#define LPSCI_RECV_BUFFER_SIZE				1
-#define lpsci_task_PRIORITY 				(configMAX_PRIORITIES - 1)
-
-
+#define LPSCI_BACKGROUND_BUFFER_SIZE		512
 
 
 class My_uart {
 public:
 	My_uart();
 	virtual ~My_uart();
-	int uart_send(const uint8_t *buffer, uint32_t length);
-	int uart_receive(uint8_t *buffer, uint32_t length, size_t *received);
-	uint8_t * lpsci_recv_buffer;
+	void uart_send(const uint8_t *buffer, uint32_t length);
+	size_t uart_receive(uint8_t *buffer, uint32_t length);
+	void reset_rx_events();
+	void reset_tx_events();
+
 
 private:
 	lpsci_rtos_handle_t handle;
 	lpsci_handle_t t_handle;
 	lpsci_rtos_config_t cfg;
-
-
-
 };
 
 #endif /* MYUART_H_ */

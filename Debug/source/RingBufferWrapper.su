@@ -1,0 +1,8 @@
+RingBufferWrapper.cpp:10:1:RingBufferWrapper::RingBufferWrapper(uint8_t*, size_t)	24	static
+RingBufferWrapper.cpp:14:1:RingBufferWrapper::~RingBufferWrapper()	16	static
+RingBufferWrapper.cpp:14:1:virtual RingBufferWrapper::~RingBufferWrapper()	16	static
+RingBufferWrapper.cpp:18:8:size_t RingBufferWrapper::Read(uint8_t*, size_t)	24	static
+RingBufferWrapper.cpp:22:8:size_t RingBufferWrapper::Write(const uint8_t*, size_t)	24	static
+RingBufferWrapper.cpp:26:8:size_t RingBufferWrapper::NumOfElements()	16	static
+RingBufferWrapper.cpp:30:1:RingBufferWrapper::RingBufferWrapper(size_t)	16	static
+RingBufferWrapper.cpp:35:6:bool RingBufferWrapper::IsFull()	16	static
