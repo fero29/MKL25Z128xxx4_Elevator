@@ -84,7 +84,7 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 			u->idle++;
 			if(u->idle > 0)
 			{
-				if(u->ring_get_readed_size() > 3)
+				if(u->ring_get_readed_size() > COUNT_IDLE_BAUDS)
 				{
 					u->readed_data = true;
 				}
@@ -108,7 +108,7 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 
 	if(status_flags & kLPSCI_RxOverrunFlag)
 	{
-		//printf("kLPSCI_RxOverrunFlag\n");
+		printf("kLPSCI_RxOverrunFlag\n");
 		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxOverrunFlag);
 	}
 

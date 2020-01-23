@@ -46,19 +46,10 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MKL25Z4.h"
-#include "fsl_debug_console.h"
+//#include "fsl_debug_console.h"
+
 #include <Myuart.h>
-
-
-
-
-
-/*******************************************************************************
- * Code
- ******************************************************************************/
-
-
-
+#include <Commands.h>
 
 
 
@@ -76,38 +67,15 @@ int main(void) {
 	BOARD_InitDebugConsole();
 	CLOCK_SetLpsci0Clock(0x1U);
 
-	My_uart* u = My_uart::get_instance();
+	//My_uart* u = My_uart::get_instance();
+
+	Commands com = Commands();
 
 
 	while (1)
 	{
 
-		if(u->readed_data)
-		{
+		com.msg_in_callback();
 
-			static uint8_t buf[255];
-			int8_t count = (uint)u->ring_get_readed_size();
-			DisableIRQ(DEMO_LPSCI_IRQn);
-			u->ring_get_readed_data(buf, count);
-
-
-
-			if(count == 5)
-			{
-				//uint8_t cr [2] = {buf[1], buf[2]};
-				/*if(get_crc8(cr, 2) == buf[4])
-				{
-					uint8_t resp [5] = {0xa1, buf[2], buf[1], 0x00, 0x00};
-					cr[0] = buf[2];
-					cr[1] = buf[1];
-					resp[4] = get_crc8(cr, 2);
-
-					u->uart_write(resp, sizeof(resp));
-					printf("sended response\n");
-				}*/
-			}
-			u->readed_data = false;
-			EnableIRQ(DEMO_LPSCI_IRQn);
-		}
 	}
 }

@@ -1,6 +1,2 @@
-core_cm0plus.h:745:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
-core_cm0plus.h:756:22:void NVIC_DisableIRQ(IRQn_Type)	16	static
-fsl_common.h:212:20:void EnableIRQ(IRQn_Type)	16	static
-fsl_common.h:238:20:void DisableIRQ(IRQn_Type)	16	static
 fsl_clock.h:620:20:void CLOCK_SetLpsci0Clock(uint32_t)	16	static
-MKL25Z128xxx4_Elevator.cpp:68:5:int main()	16	static
+MKL25Z128xxx4_Elevator.cpp:59:5:int main()	16	static

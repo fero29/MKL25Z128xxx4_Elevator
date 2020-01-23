@@ -11,6 +11,8 @@
 
 #include "Ringbuffer/RingBufferWrapper.h"
 #include "fsl_lpsci.h"
+#include <fsl_debug_console.h>
+#include <stdio.h>
 
 #define DEMO_LPSCI UART0
 #define DEMO_LPSCI_CLKSRC kCLOCK_CoreSysClk
@@ -19,7 +21,7 @@
 #define DEMO_LPSCI_IRQHandler UART0_IRQHandler
 #define BAUD 9600
 #define RING_BUF_SIZE 128
-
+#define COUNT_IDLE_BAUDS 3
 
 
 
@@ -39,9 +41,6 @@ public:
 
 
 
-
-
-
 private:
 
 	static My_uart* instance;
@@ -55,9 +54,6 @@ private:
 
 	RingBufferWrapper ringBuffRx;
 	//RingBufferWrapper ringBuffTx;
-
-
-
 
 
 

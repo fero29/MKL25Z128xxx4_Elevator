@@ -8,17 +8,76 @@
 #include <Commands.h>
 
 Commands::Commands() {
-	// TODO Auto-generated constructor stub
-
+	this->u = My_uart::get_instance();
 }
 
 Commands::~Commands() {
-	// TODO Auto-generated destructor stub
+	delete(u);
 }
 
 
+void Commands::msg_in_callback() {
+	if(u->readed_data)
+	{
+		int8_t count = (uint)u->ring_get_readed_size();
+		uint8_t buf[count];
+		DisableIRQ(DEMO_LPSCI_IRQn);
+		u->ring_get_readed_data(buf, count);
+		EnableIRQ(DEMO_LPSCI_IRQn);
 
+		if(count >= HEADER_MSG_SIZE && buf[0] == START_BYTE_DATA)
+		{
+			send_ack(buf, count);
+		}
 
+		u->readed_data = false;
+	}
+}
+
+void Commands::send_command(uint8_t dest_addr, uint8_t *command,
+		size_t size_command)
+{
+	uint8_t crc_array[size_command + 2];
+	uint8_t send_data[size_command + HEADER_MSG_SIZE];
+	send_data[0] = START_BYTE_DATA;
+	send_data[1] = dest_addr;
+	send_data[2] = 0x00;
+	send_data[3] = (uint8_t)size_command;
+
+	crc_array[0] = send_data[1];
+	crc_array[1] = send_data[2];
+
+	if(size_command > 0)
+	{
+		memcpy(&send_data[4], command, size_command);
+		memcpy(&crc_array[2], command, size_command);
+	}
+
+	send_data[4 + size_command] = get_crc8(crc_array, sizeof(crc_array));
+	send_msg(send_data, sizeof(send_data));
+}
+
+void Commands::send_ack(uint8_t *readed_data, size_t size)
+{
+	uint8_t send[size];
+	uint8_t crc_array[2];
+	send[0] = START_BYTE_ACK;
+	send[1] = readed_data[2];
+	send[2] = readed_data[1];
+	send[3] = 0x00;
+	crc_array[0] = send[1];
+	crc_array[1] = send[2];
+	send[4] = get_crc8(crc_array, sizeof(crc_array));
+	send_msg(send, sizeof(send));
+	printf("sended ack\n");
+}
+
+void Commands::send_msg(uint8_t *data, size_t size)
+{
+	DisableIRQ(DEMO_LPSCI_IRQn);
+	u->uart_write(data, size);
+	EnableIRQ(DEMO_LPSCI_IRQn);
+}
 
 
 
@@ -71,3 +130,5 @@ uint8_t Commands::get_crc8(const uint8_t * data, const uint8_t size)
     }
     return crc;
 }
+
+
