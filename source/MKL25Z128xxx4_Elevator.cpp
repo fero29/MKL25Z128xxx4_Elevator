@@ -33,11 +33,8 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define DEMO_LPSCI UART0
-#define DEMO_LPSCI_CLKSRC kCLOCK_CoreSysClk
-#define DEMO_LPSCI_CLK_FREQ CLOCK_GetFreq(kCLOCK_CoreSysClk)
-#define DEMO_LPSCI_IRQn UART0_IRQn
-#define DEMO_LPSCI_IRQHandler UART0_IRQHandler
+
+
 
 /**
  * @file    MKL25Z128xxx4_Project.cpp
@@ -50,31 +47,8 @@
 #include "clock_config.h"
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
-#include "fsl_lpsci.h"
-//#include "RingBuffer.h"
-#include "Ringbuffer/RingBufferWrapper.h"
-/* TODO: insert other include files here. */
 
-/* TODO: insert other definitions and declarations here. */
 
-uint8_t g_tipString[] =
-		"LPSCI functional API interrupt example\r\nBoard receives characters then sends them out\r\nNow please input:\r\n";
-
-volatile bool ready_to_send = false;
-volatile bool readed_data = false;
-volatile uint8_t idle = 0;
-
-//buffer_t rxBuffer_handler;
-//buffer_t txBuffer_handler;
-uint8_t rxBufferData[100];
-uint8_t txBufferData[100];
-
-/* Setup RingBuffers */
-RingBufferWrapper ringBuffRx(rxBufferData,sizeof(rxBufferData));
-RingBufferWrapper ringBuffTx(txBufferData,sizeof(txBufferData));
-
-//LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
-//LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
 
 
 
@@ -138,76 +112,12 @@ uint8_t get_crc8(const uint8_t * data, const uint8_t size)
 
 
 
-extern "C" void DEMO_LPSCI_IRQHandler(void)
-{
-
-	//uint8_t data;
-	uint32_t status_flags = LPSCI_GetStatusFlags(DEMO_LPSCI);
-
-	DisableIRQ(DEMO_LPSCI_IRQn);
-
-	if(status_flags & kLPSCI_IdleLineFlag && !(kLPSCI_RxDataRegFullFlag & status_flags))
-		{
-			LPSCI_ClearStatusFlags(UART0, kLPSCI_IdleLineFlag);
-			idle++;
-			if(idle > 0)
-			{
-				if(ringBuffRx.NumOfElements() > 3)
-				{
-					readed_data = true;
-				}
-				LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
-				idle = 0;
-			}
-		}
-
-
-	if (kLPSCI_RxDataRegFullFlag & status_flags)
-	{
-		if(DEMO_LPSCI->S1 & UART0_S1_RDRF_MASK)
-		{
-			//printf("new data\n");
-			ringBuffRx.Write((uint8_t*)&DEMO_LPSCI->D, sizeof(DEMO_LPSCI->D));
-			LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
-		}
-	}
-
-
-
-
-
-
-
-	/*If there are data to send*/
-//	if (kLPSCI_TxDataRegEmptyFlag & status_flags) {
-//		ringBuffTx.Read(&data, 1);
-
-		//LPSCI_WriteByte(DEMO_LPSCI, data);
-
-		/* Disable TX interrupt If there are NO data to send */
-//		if (ringBuffTx.NumOfElements() == 0)
-//			LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_TxDataRegEmptyInterruptEnable);
-//	}
-
-
-
-
-
-	if(status_flags & kLPSCI_RxOverrunFlag)
-	{
-		//printf("kLPSCI_RxOverrunFlag\n");
-		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxOverrunFlag);
-	}
-
-
-	EnableIRQ(DEMO_LPSCI_IRQn);
-}
 
 /*
  * @brief   Application entry point.
  */
 int main(void) {
-	lpsci_config_t config;
+	//lpsci_config_t config;
 
 	/* Init board hardware. */
 	BOARD_InitBootPins();
@@ -215,32 +125,8 @@ int main(void) {
 	BOARD_InitBootPeripherals();
 	/* Init FSL debug console. */
 	BOARD_InitDebugConsole();
-
-
-	uint8_t d[2] = {0x0, 0xC2};
-	uint8_t crc = get_crc8(d, 2);
-	printf("crc = %x\n", crc);
-
-
-
-
 	CLOCK_SetLpsci0Clock(0x1U);
 
-	/*
-	 * config.parityMode = kLPSCI_ParityDisabled;
-	 * config.stopBitCount = kLPSCI_OneStopBit;
-	 * config.enableTx = false;
-	 * config.enableRx = false;
-	 */
-	LPSCI_GetDefaultConfig(&config);
-	config.baudRate_Bps = BOARD_DEBUG_UART_BAUDRATE;
-	config.enableTx = true;
-	config.enableRx = true;
-
-	LPSCI_Init(DEMO_LPSCI, &config, DEMO_LPSCI_CLK_FREQ);
-
-	/* Send g_tipString out. */
-	LPSCI_WriteBlocking(DEMO_LPSCI, g_tipString, sizeof(g_tipString));
 
 
 
@@ -249,23 +135,9 @@ int main(void) {
 
 
 
-
-
-
-
-
-	/* Enable RX interrupt. */
-
-	LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_RxDataRegFullInterruptEnable);
-	EnableIRQ(DEMO_LPSCI_IRQn);
 
 	while (1) {
-
-		// Wait for new line
-		//while (!new_line_flag)
-		//{};
-		//new_line_flag = false; /* Clear new line flag */
-
+/*
 		if(readed_data)
 		{
 
@@ -287,7 +159,18 @@ int main(void) {
 				uint8_t cr [2] = {buf[1], buf[2]};
 				if(get_crc8(cr, 2) == buf[4])
 				{
+					uint8_t resp [5] = {0xa1, buf[2], buf[1], 0x00, 0x00};
+					cr[0] = buf[2];
+					cr[1] = buf[1];
+					resp[4] = get_crc8(cr, 2);
 
+					LPSCI_WriteBlocking(DEMO_LPSCI, resp, sizeof(resp));
+
+					//for (int i = 0; i < 5; ++i)
+					//{
+					//	LPSCI_WriteByte(DEMO_LPSCI, resp[i]);
+					//}
+					printf("sended response\n");
 				}
 			}
 
@@ -295,18 +178,10 @@ int main(void) {
 			readed_data = false;
 			EnableIRQ(DEMO_LPSCI_IRQn);
 		}
+*/
 
 
 
 
-		/* Copy data  from rxBuffer to txbuffer*/
-		//uint16_t count = ringBuffRx.NumOfElements();
-		//uint8_t buffer[count];
-		//ringBuffRx.Read( buffer, count);
-
-
-		/* Write new line to txHandler and enable Tx interrupt*/
-		//ringBuffTx.Write(buffer, count);
-		//LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_TxDataRegEmptyInterruptEnable);
 	}
 }
