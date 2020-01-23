@@ -27,12 +27,15 @@ void Commands::msg_in_callback() {
 		EnableIRQ(DEMO_LPSCI_IRQn);
 
 
+
 		if(get_crc_from_msg(buf, count) == buf[count - 1])
 		{
+
 			if(count >= HEADER_MSG_SIZE && buf[0] == START_BYTE_DATA)
 			{
 				send_ack(buf, count);
 			}
+
 
 			while(message_to_read)
 			{}
@@ -41,7 +44,7 @@ void Commands::msg_in_callback() {
 		}
 		else
 		{
-			printf("bad crc\n");
+			//printf("bad crc\n");
 		}
 
 		u->readed_data = false;
@@ -83,7 +86,7 @@ void Commands::send_ack(uint8_t *readed_data, size_t size)
 	crc_array[1] = send[2];
 	send[4] = get_crc8(crc_array, sizeof(crc_array));
 	send_msg(send, sizeof(send));
-	printf("sended ack\n");
+	//printf("sended ack\n");
 }
 
 void Commands::send_msg(uint8_t *data, size_t size)

@@ -18,12 +18,15 @@ public:
 	volatile bool door_open;
 	volatile bool led_cabin_state[5];
 	volatile bool led_state[5];
-	volatile bool move;
+	volatile bool moving;
 	volatile int32_t speed;
 	Commands commands;
 
 	void read_message();
 	void evaluate_message(uint8_t* data, size_t size);
+	void move(int32_t speed);
+	void get_position();
+	void close_door();
 
 };
 

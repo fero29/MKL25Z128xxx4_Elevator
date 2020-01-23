@@ -3,3 +3,5 @@ Control.cpp:23:1:Control::~Control()	16	static
 Control.cpp:23:1:virtual Control::~Control()	16	static
 Control.cpp:27:6:void Control::read_message()	72	dynamic
 Control.cpp:38:6:void Control::evaluate_message(uint8_t*, size_t)	24	static
+Control.cpp:111:6:void Control::move(int32_t)	32	static
+Control.cpp:121:6:void Control::get_position()	16	static

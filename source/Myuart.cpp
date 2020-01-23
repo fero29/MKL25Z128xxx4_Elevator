@@ -104,7 +104,7 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 
 	if(status_flags & kLPSCI_RxOverrunFlag)
 	{
-		printf("kLPSCI_RxOverrunFlag\n");
+		//printf("kLPSCI_RxOverrunFlag\n");
 		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxOverrunFlag);
 	}
 

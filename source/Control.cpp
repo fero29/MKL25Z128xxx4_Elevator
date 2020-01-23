@@ -14,7 +14,7 @@ Control::Control() {
 		led_cabin_state[i] = false;
 		led_state[i] = false;
 	}
-	move = false;
+	moving = false;
 	speed = 0;
 
 
@@ -43,6 +43,7 @@ void Control::evaluate_message(uint8_t *data, size_t size) {
 			case ADDRESS_ELEVATOR_BUTTON_0:
 			{
 				commands.send_command(ADDRESS_LED_0, (uint8_t*)LED_ON, sizeof(LED_ON));
+				move(-100);
 			}break;
 
 			case ADDRESS_ELEVATOR_BUTTON_1:
@@ -63,6 +64,7 @@ void Control::evaluate_message(uint8_t *data, size_t size) {
 			case ADDRESS_ELEVATOR_BUTTON_4:
 			{
 				commands.send_command(ADDRESS_LED_4, (uint8_t*)LED_ON, sizeof(LED_ON));
+				move(100);
 			}break;
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -102,4 +104,21 @@ void Control::evaluate_message(uint8_t *data, size_t size) {
 	{
 
 	}
+}
+
+
+
+void Control::move(int32_t speed)
+{
+	uint8_t s_d[5];
+	s_d[0] = MOTOR_MOVEMENT;
+	memcpy(&s_d[1], &speed, sizeof(speed));
+	commands.send_command(ADDRESS_CABIN, (uint8_t*)CABIN_LOCK, sizeof(CABIN_LOCK));
+
+	commands.send_command(ADDRESS_MOTOR, s_d, sizeof(s_d));
+}
+
+void Control::get_position()
+{
+
 }

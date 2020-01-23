@@ -6,8 +6,8 @@ Commands.cpp:10:1:Commands::Commands()	16	static
 Commands.cpp:15:1:Commands::~Commands()	16	static
 Commands.cpp:15:1:virtual Commands::~Commands()	16	static
 Commands.cpp:20:6:void Commands::msg_in_callback()	72	dynamic
-Commands.cpp:51:6:void Commands::send_command(uint8_t, uint8_t*, size_t)	120	dynamic
-Commands.cpp:74:6:void Commands::send_ack(uint8_t*, size_t)	80	dynamic
-Commands.cpp:89:6:void Commands::send_msg(uint8_t*, size_t)	24	static
-Commands.cpp:138:9:uint8_t Commands::get_crc_from_msg(uint8_t*, size_t)	72	dynamic
-Commands.cpp:151:9:uint8_t Commands::get_crc8(const uint8_t*, uint8_t)	40	static
+Commands.cpp:54:6:void Commands::send_command(uint8_t, uint8_t*, size_t)	120	dynamic
+Commands.cpp:77:6:void Commands::send_ack(uint8_t*, size_t)	80	dynamic
+Commands.cpp:92:6:void Commands::send_msg(uint8_t*, size_t)	24	static
+Commands.cpp:141:9:uint8_t Commands::get_crc_from_msg(uint8_t*, size_t)	72	dynamic
+Commands.cpp:154:9:uint8_t Commands::get_crc8(const uint8_t*, uint8_t)	40	static
