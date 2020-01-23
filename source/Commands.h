@@ -85,10 +85,14 @@ public:
 	void msg_in_callback();
 	void send_command(uint8_t dest_addr, uint8_t* command, size_t size_command);
 	void send_ack(uint8_t* readed_data, size_t size);
+	RingBufferWrapper ringBuffCom;
+	volatile bool message_to_read;
 
 private:
 	void send_msg(uint8_t* data, size_t size);
 	uint8_t get_crc8(const uint8_t * data, const uint8_t size);
+	uint8_t commands_data[RING_BUF_SIZE];
+
 };
 
 #endif /* COMMANDS_H_ */

@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../source/Commands.cpp \
+../source/Control.cpp \
 ../source/MKL25Z128xxx4_Elevator.cpp \
 ../source/Mytimer.cpp \
 ../source/Myuart.cpp \
@@ -16,6 +17,7 @@ C_SRCS += \
 
 OBJS += \
 ./source/Commands.o \
+./source/Control.o \
 ./source/MKL25Z128xxx4_Elevator.o \
 ./source/Mytimer.o \
 ./source/Myuart.o \
@@ -25,6 +27,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./source/Commands.d \
+./source/Control.d \
 ./source/MKL25Z128xxx4_Elevator.d \
 ./source/Mytimer.d \
 ./source/Myuart.d \

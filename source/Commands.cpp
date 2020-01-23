@@ -7,8 +7,9 @@
 
 #include <Commands.h>
 
-Commands::Commands() {
+Commands::Commands():ringBuffCom(commands_data, RING_BUF_SIZE) {
 	this->u = My_uart::get_instance();
+	message_to_read = false;
 }
 
 Commands::~Commands() {
@@ -32,6 +33,11 @@ void Commands::msg_in_callback() {
 			{
 				send_ack(buf, count);
 			}
+
+			while(message_to_read)
+			{}
+			ringBuffCom.Write(buf, count);
+			message_to_read = true;
 		}
 		else
 		{

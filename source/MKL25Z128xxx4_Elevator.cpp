@@ -52,6 +52,8 @@
 #include <Myuart.h>
 #include <Commands.h>
 #include <Mytimer.h>
+#include <Control.h>
+
 
 
 
@@ -69,9 +71,10 @@ int main(void) {
 	BOARD_InitDebugConsole();
 	CLOCK_SetLpsci0Clock(0x1U);
 
-	//My_uart* u = My_uart::get_instance();
+	Control ctrl = Control();
 
-	//Commands com = Commands();
+
+
 	//com.send_command(ADDRESS_LED_0, (uint8_t*)LED_ON, sizeof(LED_ON));
 	//com.send_command(ADDRESS_LED_1, (uint8_t*)LED_ON, sizeof(LED_ON));
 	//com.send_command(ADDRESS_LED_2, (uint8_t*)LED_ON, sizeof(LED_ON));
@@ -84,16 +87,14 @@ int main(void) {
 	//memcpy(&mot[1], &speed, sizeof(speed));
  	//com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
 
-	Mytimer tim = Mytimer(2000);
 
 
 
 
 	while (1)
 	{
-
-		//com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
-	//	com.msg_in_callback();
+		ctrl.commands.msg_in_callback();
+		ctrl.read_message();
 
 	}
 }

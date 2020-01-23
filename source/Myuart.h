@@ -13,6 +13,7 @@
 #include "fsl_lpsci.h"
 #include <fsl_debug_console.h>
 #include <stdio.h>
+#include <Mytimer.h>
 
 #define DEMO_LPSCI UART0
 #define DEMO_LPSCI_CLKSRC kCLOCK_CoreSysClk
@@ -43,8 +44,9 @@ public:
 
 private:
 
-	static My_uart* instance;
 	My_uart();
+	static My_uart* instance;
+
 	lpsci_config_t config;
 
 
