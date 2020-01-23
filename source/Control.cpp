@@ -7,6 +7,10 @@
 
 #include <Control.h>
 
+
+/*
+ * @brief constructor of object Control. this object have a main control
+ */
 Control::Control() {
 	door_open = true;
 	for(int i = 0; i < 5; i++)
@@ -24,6 +28,9 @@ Control::~Control() {
 	// TODO Auto-generated destructor stub
 }
 
+/*
+ * @brief function must be called in main loop, it usses for getting messages from control object
+ */
 void Control::read_message() {
 	if(commands.message_to_read)
 	{
@@ -35,6 +42,10 @@ void Control::read_message() {
 	}
 }
 
+
+/*
+ * @brief function evaluate message and call commands
+ */
 void Control::evaluate_message(uint8_t *data, size_t size) {
 	if(data[0] == START_BYTE_DATA)
 	{
@@ -107,7 +118,9 @@ void Control::evaluate_message(uint8_t *data, size_t size) {
 }
 
 
-
+/*
+ * @brief function close cabin of elevator and send command to move
+ */
 void Control::move(int32_t speed)
 {
 	uint8_t s_d[5];
@@ -117,6 +130,7 @@ void Control::move(int32_t speed)
 
 	commands.send_command(ADDRESS_MOTOR, s_d, sizeof(s_d));
 }
+
 
 void Control::get_position()
 {

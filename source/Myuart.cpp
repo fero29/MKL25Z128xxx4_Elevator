@@ -10,26 +10,41 @@
 My_uart* My_uart::instance = 0;
 
 
+/*
+ * @brief function to write data on UART
+ */
 void My_uart::uart_write(uint8_t *data, size_t size)
 {
 	LPSCI_WriteBlocking(DEMO_LPSCI, data, size);
 }
 
+/*
+ * @brief function get readed data from uart, saved in ring buffer
+ */
 void My_uart::ring_get_readed_data(uint8_t *data, size_t size)
 {
 	ringBuffRx.Read(data, size);
 }
 
+/*
+ * @brief function to save data to ring buffer
+ */
 void My_uart::ring_write(uint8_t *data, size_t size)
 {
 	ringBuffRx.Write(data, size);
 }
 
+/*
+ * @brief function to get readed data in ring buffer
+ */
 size_t My_uart::ring_get_readed_size()
 {
 	return ringBuffRx.NumOfElements();
 }
 
+/*
+ * @brief Constructor of object My_uart which handle UART0
+ */
 My_uart::My_uart() : ringBuffRx(rxBufferData, RING_BUF_SIZE)/*, ringBuffTx(txBufferData, RING_BUF_SIZE)*/ {
 	readed_data = false;
 	idle = 0;
@@ -59,7 +74,9 @@ My_uart::~My_uart() {
 }
 
 
-
+/*
+ * @brief function return pointer to instance, this object is singleton
+ */
 My_uart* My_uart::get_instance()
 {
 	if(instance == 0)
@@ -70,6 +87,9 @@ My_uart* My_uart::get_instance()
 }
 
 
+/*
+ * @brief IRQ handler for uart0, it wait for data and when comes idle flag, set flag readed_data
+ */
 extern "C" void DEMO_LPSCI_IRQHandler(void)
 {
 	My_uart* u = My_uart::get_instance();

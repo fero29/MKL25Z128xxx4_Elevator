@@ -30,14 +30,9 @@
 
 #include <fsl_clock.h>
 
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
-
-
 
 /**
- * @file    MKL25Z128xxx4_Project.cpp
+ * @file    MKL25Z128xxx4_Elevator.cpp
  * @brief   Application entry point.
  */
 #include <stdio.h>
@@ -47,8 +42,8 @@
 #include "clock_config.h"
 #include "MKL25Z4.h"
 #include "stdint.h"
-//#include "fsl_debug_console.h"
 
+/*My includes*/
 #include <Myuart.h>
 #include <Commands.h>
 #include <Mytimer.h>
@@ -71,21 +66,9 @@ int main(void) {
 	BOARD_InitDebugConsole();
 	CLOCK_SetLpsci0Clock(0x1U);
 
+
+	/* object Control to control elevator*/
 	Control ctrl = Control();
-
-
-
-	//com.send_command(ADDRESS_LED_0, (uint8_t*)LED_ON, sizeof(LED_ON));
-	//com.send_command(ADDRESS_LED_1, (uint8_t*)LED_ON, sizeof(LED_ON));
-	//com.send_command(ADDRESS_LED_2, (uint8_t*)LED_ON, sizeof(LED_ON));
-	//com.send_command(ADDRESS_LED_3, (uint8_t*)LED_ON, sizeof(LED_ON));
-	//com.send_command(ADDRESS_LED_4, (uint8_t*)LED_ON, sizeof(LED_ON));
-	//com.send_command(ADDRESS_CABIN, (uint8_t*)CABIN_LOCK, sizeof(CABIN_LOCK));
-	//int32_t speed = -10;
-	//uint8_t mot[5];
-	//mot[0] = MOTOR_MOVEMENT;
-	//memcpy(&mot[1], &speed, sizeof(speed));
- 	//com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
 
 
 

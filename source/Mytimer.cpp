@@ -9,6 +9,10 @@
 
 Mytimer* Mytimer::instance = 0;
 
+
+/*
+ * @brief constructor of singleton object Mytimer
+ */
 Mytimer::Mytimer()
 {
 	pitIsrFlag = false;
@@ -25,6 +29,9 @@ Mytimer::~Mytimer() {
 	// TODO Auto-generated destructor stub
 }
 
+/*
+ * @brief IRQ handler for interupts from timer
+ */
 void PIT_IRQHandler(void)
 {
 	Mytimer* tim = Mytimer::get_instance();
@@ -33,6 +40,9 @@ void PIT_IRQHandler(void)
     tim->pitIsrFlag = true;
 }
 
+/*
+ * @brief handling function for call timer
+ */
 void Mytimer::timer_handler()
 {
 	if(pitIsrFlag)
@@ -42,16 +52,26 @@ void Mytimer::timer_handler()
 	}
 }
 
+
+/*
+ * @brief function to start timer
+ */
 void Mytimer::start(uint32_t ms) {
 	PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, USEC_TO_COUNT(ms * 1000, PIT_SOURCE_CLOCK));
 	PIT_StartTimer(PIT, kPIT_Chnl_0);
 }
 
+/*
+ * @brief function to pause timer
+ */
 void Mytimer::pause() {
 	PIT_StopTimer(PIT, kPIT_Chnl_0);
 }
 
 
+/*
+ * @brief function return pointer to instance of object Mytimer
+ */
 Mytimer* Mytimer::get_instance()
 {
 	if(instance == 0)

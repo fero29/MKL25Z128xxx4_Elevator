@@ -7,16 +7,24 @@
 
 #include <Commands.h>
 
+/*
+ * @brief constructor of object Commands, this object care of sending and reading commands
+ */
 Commands::Commands():ringBuffCom(commands_data, RING_BUF_SIZE) {
 	this->u = My_uart::get_instance();
 	message_to_read = false;
 }
 
+/*
+ * @brief destructor of object Commands
+ */
 Commands::~Commands() {
 	delete(u);
 }
 
-
+/*
+ * @brief callback function for incoming messages
+ */
 void Commands::msg_in_callback() {
 	if(u->readed_data)
 	{
@@ -51,6 +59,10 @@ void Commands::msg_in_callback() {
 	}
 }
 
+
+/*
+ * @ generate data for send command and calculate crc
+ */
 void Commands::send_command(uint8_t dest_addr, uint8_t *command,
 		size_t size_command)
 {
@@ -74,6 +86,9 @@ void Commands::send_command(uint8_t dest_addr, uint8_t *command,
 	send_msg(send_data, sizeof(send_data));
 }
 
+/*
+ * @brief generate ack from message and send it
+ */
 void Commands::send_ack(uint8_t *readed_data, size_t size)
 {
 	uint8_t send[size];
@@ -89,6 +104,10 @@ void Commands::send_ack(uint8_t *readed_data, size_t size)
 	//printf("sended ack\n");
 }
 
+
+/*
+ * @brief diable irq from uart0 and send data
+ */
 void Commands::send_msg(uint8_t *data, size_t size)
 {
 	DisableIRQ(DEMO_LPSCI_IRQn);
@@ -98,9 +117,6 @@ void Commands::send_msg(uint8_t *data, size_t size)
 
 
 
-/*
- * https://stackoverflow.com/questions/29214301/ios-how-to-calculate-crc-8-dallas-maxim-of-nsdata
- */
 
 uint8_t crc_array[256] =
 {
@@ -138,6 +154,9 @@ uint8_t crc_array[256] =
     0xb6, 0xe8, 0x0a, 0x54, 0xd7, 0x89, 0x6b, 0x35,
 };
 
+/*
+ * @brief return crc_8 from message  to confirm
+ */
 uint8_t Commands::get_crc_from_msg(uint8_t *data, size_t size)
 {
 	uint8_t crc_array[size - 3];
@@ -151,6 +170,10 @@ uint8_t Commands::get_crc_from_msg(uint8_t *data, size_t size)
 	return get_crc8(crc_array, sizeof(crc_array));
 }
 
+/*
+ * @brief return crc_8
+ * source : https://stackoverflow.com/questions/29214301/ios-how-to-calculate-crc-8-dallas-maxim-of-nsdata
+ */
 uint8_t Commands::get_crc8(const uint8_t * data, const uint8_t size)
 {
 	uint8_t crc = 0;

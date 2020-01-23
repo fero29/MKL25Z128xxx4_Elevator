@@ -40,22 +40,14 @@ public:
 	volatile bool readed_data;
 	volatile uint8_t idle;
 
-
-
 private:
 
 	My_uart();
 	static My_uart* instance;
-
 	lpsci_config_t config;
-
-
-
 	uint8_t rxBufferData[RING_BUF_SIZE];
-	//uint8_t txBufferData[RING_BUF_SIZE];
-
 	RingBufferWrapper ringBuffRx;
-	//RingBufferWrapper ringBuffTx;
+
 
 
 

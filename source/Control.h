@@ -15,7 +15,6 @@ public:
 	Control();
 	virtual ~Control();
 
-	volatile bool door_open;
 	volatile bool led_cabin_state[5];
 	volatile bool led_state[5];
 	volatile bool moving;
