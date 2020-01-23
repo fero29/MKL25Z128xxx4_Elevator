@@ -25,10 +25,18 @@ void Commands::msg_in_callback() {
 		u->ring_get_readed_data(buf, count);
 		EnableIRQ(DEMO_LPSCI_IRQn);
 
-		if(count >= HEADER_MSG_SIZE && buf[0] == START_BYTE_DATA)
-		{
-			send_ack(buf, count);
-		}
+
+		//if(get_crc_from_msg(buf, count) == buf[count - 1])
+		//{
+			if(count >= HEADER_MSG_SIZE && buf[0] == START_BYTE_DATA)
+			{
+				send_ack(buf, count);
+			}
+		//}
+		//else
+		//{
+		//	printf("bad crc\n");
+		//}
 
 		u->readed_data = false;
 	}
@@ -120,6 +128,19 @@ uint8_t crc_array[256] =
     0x74, 0x2a, 0xc8, 0x96, 0x15, 0x4b, 0xa9, 0xf7,
     0xb6, 0xe8, 0x0a, 0x54, 0xd7, 0x89, 0x6b, 0x35,
 };
+
+uint8_t Commands::get_crc_from_msg(uint8_t *data, size_t size)
+{
+	uint8_t crc_array[size - 3];
+	crc_array[0] = data[1];
+	crc_array[1] = data[2];
+	if(size - HEADER_MSG_SIZE > 0)
+	{
+		memcpy(&crc_array[2], &data[4], size - HEADER_MSG_SIZE);
+	}
+
+	return get_crc8(crc_array, sizeof(crc_array));
+}
 
 uint8_t Commands::get_crc8(const uint8_t * data, const uint8_t size)
 {

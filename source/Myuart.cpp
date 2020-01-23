@@ -93,18 +93,14 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 			}
 		}
 
-
 	if (kLPSCI_RxDataRegFullFlag & status_flags)
 	{
 		if(DEMO_LPSCI->S1 & UART0_S1_RDRF_MASK)
 		{
-			//printf("new data\n");
 			u->ring_write((uint8_t *)&DEMO_LPSCI->D, sizeof(DEMO_LPSCI->D));
 			LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
 		}
 	}
-
-
 
 	if(status_flags & kLPSCI_RxOverrunFlag)
 	{
@@ -112,6 +108,29 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_RxOverrunFlag);
 	}
 
+	if(status_flags & kLPSCI_NoiseErrorFlag)
+	{
+		printf("kLPSCI_NoiseErrorFlag\n");
+		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_NoiseErrorFlag);
+	}
+
+	if(status_flags & kLPSCI_FramingErrorFlag)
+	{
+		printf("kLPSCI_FramingErrorFlag\n");
+		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_FramingErrorFlag);
+	}
+
+	if(status_flags & kLPSCI_ParityErrorFlag)
+	{
+		printf("kLPSCI_ParityErrorFlag\n");
+		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_ParityErrorFlag);
+	}
+
+	if(status_flags & kLPSCI_LinBreakFlag)
+	{
+		printf("kLPSCI_LinBreakFlag\n");
+		LPSCI_ClearStatusFlags(DEMO_LPSCI, kLPSCI_LinBreakFlag);
+	}
 
 	EnableIRQ(DEMO_LPSCI_IRQn);
 }
