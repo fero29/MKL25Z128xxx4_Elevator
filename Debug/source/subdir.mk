@@ -6,6 +6,7 @@
 CPP_SRCS += \
 ../source/Commands.cpp \
 ../source/MKL25Z128xxx4_Elevator.cpp \
+../source/Mytimer.cpp \
 ../source/Myuart.cpp \
 ../source/cpp_config.cpp 
 
@@ -16,6 +17,7 @@ C_SRCS += \
 OBJS += \
 ./source/Commands.o \
 ./source/MKL25Z128xxx4_Elevator.o \
+./source/Mytimer.o \
 ./source/Myuart.o \
 ./source/cpp_config.o \
 ./source/mtb.o \
@@ -24,6 +26,7 @@ OBJS += \
 CPP_DEPS += \
 ./source/Commands.d \
 ./source/MKL25Z128xxx4_Elevator.d \
+./source/Mytimer.d \
 ./source/Myuart.d \
 ./source/cpp_config.d 
 

@@ -500,8 +500,11 @@ WEAK_AV void RTC_Seconds_IRQHandler(void)
 {   RTC_Seconds_DriverIRQHandler();
 }
 
+extern void PIT_IRQHandler(void);
 WEAK_AV void PIT_IRQHandler(void)
-{   PIT_DriverIRQHandler();
+{
+	//PIT_DriverIRQHandler();
+	void PIT_IRQHandler(void);
 }
 
 WEAK_AV void Reserved39_IRQHandler(void)

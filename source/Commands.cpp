@@ -26,17 +26,17 @@ void Commands::msg_in_callback() {
 		EnableIRQ(DEMO_LPSCI_IRQn);
 
 
-		//if(get_crc_from_msg(buf, count) == buf[count - 1])
-		//{
+		if(get_crc_from_msg(buf, count) == buf[count - 1])
+		{
 			if(count >= HEADER_MSG_SIZE && buf[0] == START_BYTE_DATA)
 			{
 				send_ack(buf, count);
 			}
-		//}
-		//else
-		//{
-		//	printf("bad crc\n");
-		//}
+		}
+		else
+		{
+			printf("bad crc\n");
+		}
 
 		u->readed_data = false;
 	}

@@ -46,10 +46,12 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "MKL25Z4.h"
+#include "stdint.h"
 //#include "fsl_debug_console.h"
 
 #include <Myuart.h>
 #include <Commands.h>
+#include <Mytimer.h>
 
 
 
@@ -69,25 +71,29 @@ int main(void) {
 
 	//My_uart* u = My_uart::get_instance();
 
-	Commands com = Commands();
+	//Commands com = Commands();
 	//com.send_command(ADDRESS_LED_0, (uint8_t*)LED_ON, sizeof(LED_ON));
 	//com.send_command(ADDRESS_LED_1, (uint8_t*)LED_ON, sizeof(LED_ON));
 	//com.send_command(ADDRESS_LED_2, (uint8_t*)LED_ON, sizeof(LED_ON));
 	//com.send_command(ADDRESS_LED_3, (uint8_t*)LED_ON, sizeof(LED_ON));
-	com.send_command(ADDRESS_LED_4, (uint8_t*)LED_ON, sizeof(LED_ON));
-	com.send_command(ADDRESS_CABIN, (uint8_t*)CABIN_LOCK, sizeof(CABIN_LOCK));
-	int32_t speed = -50;
-	uint8_t mot[5];
-	mot[0] = MOTOR_MOVEMENT;
-	memcpy(&mot[1], &speed, sizeof(speed));
- 	com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
+	//com.send_command(ADDRESS_LED_4, (uint8_t*)LED_ON, sizeof(LED_ON));
+	//com.send_command(ADDRESS_CABIN, (uint8_t*)CABIN_LOCK, sizeof(CABIN_LOCK));
+	//int32_t speed = -10;
+	//uint8_t mot[5];
+	//mot[0] = MOTOR_MOVEMENT;
+	//memcpy(&mot[1], &speed, sizeof(speed));
+ 	//com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
+
+	Mytimer tim = Mytimer(2000);
+
+
 
 
 	while (1)
 	{
 
 		//com.send_command(ADDRESS_MOTOR, mot, sizeof(mot));
-		com.msg_in_callback();
+	//	com.msg_in_callback();
 
 	}
 }
