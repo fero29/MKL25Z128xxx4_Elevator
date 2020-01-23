@@ -7,8 +7,30 @@
 
 #include <Myuart.h>
 
+My_uart* My_uart::instance = 0;
 
-My_uart::My_uart() : ringBuffRx(rxBufferData, RING_BUF_SIZE), ringBuffTx(txBufferData, RING_BUF_SIZE) {
+
+void My_uart::uart_write(uint8_t *data, size_t size)
+{
+	LPSCI_WriteBlocking(DEMO_LPSCI, data, size);
+}
+
+void My_uart::ring_get_readed_data(uint8_t *data, size_t size)
+{
+	ringBuffRx.Read(data, size);
+}
+
+void My_uart::ring_write(uint8_t *data, size_t size)
+{
+	ringBuffRx.Write(data, size);
+}
+
+size_t My_uart::ring_get_readed_size()
+{
+	return ringBuffRx.NumOfElements();
+}
+
+My_uart::My_uart() : ringBuffRx(rxBufferData, RING_BUF_SIZE)/*, ringBuffTx(txBufferData, RING_BUF_SIZE)*/ {
 	readed_data = false;
 	idle = 0;
 
@@ -40,19 +62,18 @@ My_uart::~My_uart() {
 
 My_uart* My_uart::get_instance()
 {
-	if(instance == nullptr)
+	if(instance == 0)
 	{
-
 		instance = new My_uart();
 	}
 	return instance;
 }
 
-/*
+
 extern "C" void DEMO_LPSCI_IRQHandler(void)
 {
+	My_uart* u = My_uart::get_instance();
 
-	//uint8_t data;
 	uint32_t status_flags = LPSCI_GetStatusFlags(DEMO_LPSCI);
 
 	DisableIRQ(DEMO_LPSCI_IRQn);
@@ -60,15 +81,15 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 	if(status_flags & kLPSCI_IdleLineFlag && !(kLPSCI_RxDataRegFullFlag & status_flags))
 		{
 			LPSCI_ClearStatusFlags(UART0, kLPSCI_IdleLineFlag);
-			idle++;
-			if(idle > 0)
+			u->idle++;
+			if(u->idle > 0)
 			{
-				if(ringBuffRx.NumOfElements() > 3)
+				if(u->ring_get_readed_size() > 3)
 				{
-					readed_data = true;
+					u->readed_data = true;
 				}
 				LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
-				idle = 0;
+				u->idle = 0;
 			}
 		}
 
@@ -78,24 +99,11 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 		if(DEMO_LPSCI->S1 & UART0_S1_RDRF_MASK)
 		{
 			//printf("new data\n");
-			ringBuffRx.Write((uint8_t*)&DEMO_LPSCI->D, sizeof(DEMO_LPSCI->D));
+			u->ring_write((uint8_t *)&DEMO_LPSCI->D, sizeof(DEMO_LPSCI->D));
 			LPSCI_EnableInterrupts(DEMO_LPSCI, kLPSCI_IdleLineInterruptEnable);
 		}
 	}
 
-*/	/*If there are data to send*/
-//	if (kLPSCI_TxDataRegEmptyFlag & status_flags) {
-//		ringBuffTx.Read(&data, 1);
-
-		//LPSCI_WriteByte(DEMO_LPSCI, data);
-
-		/* Disable TX interrupt If there are NO data to send */
-//		if (ringBuffTx.NumOfElements() == 0)
-//			LPSCI_DisableInterrupts(DEMO_LPSCI, kLPSCI_TxDataRegEmptyInterruptEnable);
-//	}/
-
-
-/*
 
 
 	if(status_flags & kLPSCI_RxOverrunFlag)
@@ -106,4 +114,6 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 
 
 	EnableIRQ(DEMO_LPSCI_IRQn);
-}*/
+}
+
+

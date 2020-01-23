@@ -29,6 +29,13 @@ class My_uart {
 public:
 	static My_uart* get_instance();
 	virtual ~My_uart();
+	void uart_write(uint8_t* data, size_t size);
+	void ring_write(uint8_t* data, size_t size);
+	void ring_get_readed_data(uint8_t* data, size_t size);
+	size_t ring_get_readed_size();
+
+	volatile bool readed_data;
+	volatile uint8_t idle;
 
 
 
@@ -36,19 +43,18 @@ public:
 
 
 private:
-	My_uart();
-	static My_uart* instance;
 
+	static My_uart* instance;
+	My_uart();
 	lpsci_config_t config;
 
-	volatile bool readed_data;
-	volatile uint8_t idle;
+
 
 	uint8_t rxBufferData[RING_BUF_SIZE];
-	uint8_t txBufferData[RING_BUF_SIZE];
+	//uint8_t txBufferData[RING_BUF_SIZE];
 
 	RingBufferWrapper ringBuffRx;
-	RingBufferWrapper ringBuffTx;
+	//RingBufferWrapper ringBuffTx;
 
 
 

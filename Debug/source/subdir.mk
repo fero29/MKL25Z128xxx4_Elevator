@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../source/Commands.cpp \
 ../source/MKL25Z128xxx4_Elevator.cpp \
 ../source/Myuart.cpp \
 ../source/cpp_config.cpp 
@@ -13,6 +14,7 @@ C_SRCS += \
 ../source/semihost_hardfault.c 
 
 OBJS += \
+./source/Commands.o \
 ./source/MKL25Z128xxx4_Elevator.o \
 ./source/Myuart.o \
 ./source/cpp_config.o \
@@ -20,6 +22,7 @@ OBJS += \
 ./source/semihost_hardfault.o 
 
 CPP_DEPS += \
+./source/Commands.d \
 ./source/MKL25Z128xxx4_Elevator.d \
 ./source/Myuart.d \
 ./source/cpp_config.d 
