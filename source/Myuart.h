@@ -20,10 +20,9 @@
 #define DEMO_LPSCI_CLK_FREQ CLOCK_GetFreq(kCLOCK_CoreSysClk)
 #define DEMO_LPSCI_IRQn UART0_IRQn
 #define DEMO_LPSCI_IRQHandler UART0_IRQHandler
-#define BAUD 9600
+#define BAUD 115200
 #define RING_BUF_SIZE 128
 #define COUNT_IDLE_BAUDS 3
-
 
 
 class My_uart {
@@ -39,6 +38,7 @@ public:
 
 	volatile bool readed_data;
 	volatile uint8_t idle;
+
 
 private:
 

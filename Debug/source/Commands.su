@@ -2,12 +2,12 @@ core_cm0plus.h:745:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
 core_cm0plus.h:756:22:void NVIC_DisableIRQ(IRQn_Type)	16	static
 fsl_common.h:212:20:void EnableIRQ(IRQn_Type)	16	static
 fsl_common.h:238:20:void DisableIRQ(IRQn_Type)	16	static
-Commands.cpp:10:1:Commands::Commands()	16	static
-Commands.cpp:15:1:Commands::~Commands()	16	static
-Commands.cpp:15:1:virtual Commands::~Commands()	16	static
-Commands.cpp:20:6:void Commands::msg_in_callback()	72	dynamic
-Commands.cpp:54:6:void Commands::send_command(uint8_t, uint8_t*, size_t)	120	dynamic
-Commands.cpp:77:6:void Commands::send_ack(uint8_t*, size_t)	80	dynamic
-Commands.cpp:92:6:void Commands::send_msg(uint8_t*, size_t)	24	static
-Commands.cpp:141:9:uint8_t Commands::get_crc_from_msg(uint8_t*, size_t)	72	dynamic
-Commands.cpp:154:9:uint8_t Commands::get_crc8(const uint8_t*, uint8_t)	40	static
+Commands.cpp:13:1:Commands::Commands()	16	static
+Commands.cpp:21:1:Commands::~Commands()	16	static
+Commands.cpp:21:1:virtual Commands::~Commands()	16	static
+Commands.cpp:28:6:void Commands::msg_in_callback()	72	dynamic
+Commands.cpp:66:6:void Commands::send_command(uint8_t, uint8_t*, size_t)	120	dynamic
+Commands.cpp:92:6:void Commands::send_ack(uint8_t*, size_t)	80	dynamic
+Commands.cpp:111:6:void Commands::send_msg(uint8_t*, size_t)	24	static
+Commands.cpp:160:9:uint8_t Commands::get_crc_from_msg(uint8_t*, size_t)	72	dynamic
+Commands.cpp:177:9:uint8_t Commands::get_crc8(const uint8_t*, uint8_t)	40	static

@@ -16,6 +16,8 @@ My_uart* My_uart::instance = 0;
 void My_uart::uart_write(uint8_t *data, size_t size)
 {
 	LPSCI_WriteBlocking(DEMO_LPSCI, data, size);
+	/* create delay betwen mesages*/
+	printf(" ");
 }
 
 /*

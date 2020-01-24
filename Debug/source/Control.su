@@ -1,7 +1,16 @@
-Control.cpp:10:1:Control::Control()	24	static
-Control.cpp:23:1:Control::~Control()	16	static
-Control.cpp:23:1:virtual Control::~Control()	16	static
-Control.cpp:27:6:void Control::read_message()	72	dynamic
-Control.cpp:38:6:void Control::evaluate_message(uint8_t*, size_t)	24	static
-Control.cpp:111:6:void Control::move(int32_t)	32	static
-Control.cpp:121:6:void Control::get_position()	16	static
+Control.cpp:14:1:Control::Control()	16	static
+Control.cpp:29:1:Control::~Control()	16	static
+Control.cpp:29:1:virtual Control::~Control()	16	static
+Control.cpp:36:6:void Control::read_message()	72	dynamic
+Control.cpp:51:6:void Control::evaluate_message(uint8_t*, size_t)	72	dynamic
+Control.cpp:127:6:void Control::evaluate_position(uint8_t, uint8_t)	16	static
+Control.cpp:130:6:void Control::evaluate_button(uint8_t)	32	static
+Control.cpp:144:6:void Control::motor_move(int32_t)	32	static
+Control.cpp:155:6:void Control::motor_stop()	16	static
+Control.cpp:160:6:void Control::door(uint8_t)	16	static
+Control.cpp:164:6:void Control::emergency_break(uint8_t)	16	static
+Control.cpp:168:6:void Control::display(uint8_t)	16	static
+Control.cpp:172:6:void Control::led(uint8_t, uint8_t)	16	static
+Control.cpp:176:6:void Control::send_to_terminal(uint8_t*, size_t)	24	static
+Control.cpp:180:6:void Control::read_from_terminal(uint8_t*, size_t)	32	static
+Control.cpp:189:6:void Control::watchdog(uint8_t)	16	static

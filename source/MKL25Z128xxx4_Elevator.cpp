@@ -30,7 +30,6 @@
 
 #include <fsl_clock.h>
 
-
 /**
  * @file    MKL25Z128xxx4_Elevator.cpp
  * @brief   Application entry point.
@@ -49,35 +48,25 @@
 #include <Mytimer.h>
 #include <Control.h>
 
-
+/* object Control for control elevator*/
 
 
 /*
  * @brief   Application entry point.
  */
 int main(void) {
-	//lpsci_config_t config;
-
 	/* Init board hardware. */
 	BOARD_InitBootPins();
 	BOARD_InitBootClocks();
 	BOARD_InitBootPeripherals();
 	/* Init FSL debug console. */
 	BOARD_InitDebugConsole();
-	CLOCK_SetLpsci0Clock(0x1U);
 
-
-	/* object Control to control elevator*/
-	Control ctrl = Control();
-
-
-
-
+	Control ctrl;
 
 	while (1)
 	{
 		ctrl.commands.msg_in_callback();
 		ctrl.read_message();
-
 	}
 }

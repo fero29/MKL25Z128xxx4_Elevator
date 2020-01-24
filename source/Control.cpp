@@ -12,14 +12,16 @@
  * @brief constructor of object Control. this object have a main control
  */
 Control::Control() {
-	door_open = true;
-	for(int i = 0; i < 5; i++)
-	{
-		led_cabin_state[i] = false;
-		led_state[i] = false;
-	}
+	//door_open = true;
+	//for(int i = 0; i < 5; i++)
+	//{
+	//	led_cabin_state[i] = false;
+	//	led_state[i] = false;
+	//}
 	moving = false;
-	speed = 0;
+	move_to = ADDRESS_LIMIT_SWITCH_0;
+	motor_move(-100);
+	//speed = 0;
 
 
 }
@@ -49,90 +51,147 @@ void Control::read_message() {
 void Control::evaluate_message(uint8_t *data, size_t size) {
 	if(data[0] == START_BYTE_DATA)
 	{
-		switch(data[2])
+		uint8_t addr = data[2];
+		switch(addr >> 4)
 		{
-			case ADDRESS_ELEVATOR_BUTTON_0:
+			case ADDRESS_ELEVATOR_BUTTON_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_0, (uint8_t*)LED_ON, sizeof(LED_ON));
-				move(-100);
+				evaluate_button(addr);
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_1:
+			case ADDRESS_ELEVATOR_BUTTON_CABIN_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_1, (uint8_t*)LED_ON, sizeof(LED_ON));
+				evaluate_button(addr);
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_2:
+			case ADDRESS_DISPLAY_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_2, (uint8_t*)LED_ON, sizeof(LED_ON));
+				//no command
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_3:
+			case ADDRESS_LED_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_3, (uint8_t*)LED_ON, sizeof(LED_ON));
+				//no command
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_4:
+			case ADDRESS_LED_CABIN_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_4, (uint8_t*)LED_ON, sizeof(LED_ON));
-				move(100);
+				//no command
 			}break;
 
-/*-----------------------------------------------------------------------------------------------*/
-			case ADDRESS_ELEVATOR_BUTTON_CABIN_0:
+			case ADDRESS_LIMIT_SWITCH_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_CABIN_0, (uint8_t*)LED_ON, sizeof(LED_ON));
+				evaluate_position(addr, data[4]);
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_CABIN_1:
+			/*TERMINAL AND DOWN LIMIT SWITCH HAVE THE SAME HIGH 4BITS*/
+			case ADDRESS_TERMINAL_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_CABIN_1, (uint8_t*)LED_ON, sizeof(LED_ON));
+				if(addr == ADDRESS_TERMINAL)
+				{
+					size_t s = data[3];
+					uint8_t txt[s];
+					memcpy(txt, &data[4], s);
+					read_from_terminal(data, s);
+				}
+				else if(addr == ADDRESS_DOWN_LIMIT_SWITCH)
+				{
+					evaluate_position(data[2], data[4]);
+				}
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_CABIN_2:
+			/*CABIN, MOTOR AND WATCHDOG HAVE THE SAME HIGH 4BITS*/
+			case ADDRESS_CABIN_HIGH_4_BITS:
 			{
-				commands.send_command(ADDRESS_LED_CABIN_2, (uint8_t*)LED_ON, sizeof(LED_ON));
+				if(addr == ADDRESS_WATCHDOG_TIMER)
+				{
+					/*TODO finish it*/
+				}
+				else if(addr == ADDRESS_MOTOR)
+				{
+					//no command
+				}
+				else if(addr == ADDRESS_CABIN)
+				{
+					//no command
+				}
 			}break;
 
-			case ADDRESS_ELEVATOR_BUTTON_CABIN_3:
-			{
-				commands.send_command(ADDRESS_LED_CABIN_3, (uint8_t*)LED_ON, sizeof(LED_ON));
-			}break;
-
-			case ADDRESS_ELEVATOR_BUTTON_CABIN_4:
-			{
-				commands.send_command(ADDRESS_LED_CABIN_4, (uint8_t*)LED_ON, sizeof(LED_ON));
-			}break;
-
-
-
-
-
-
+			default:{};
 		}
 	}
 	else
 	{
-
+		if(data[2] >> 4 == ADDRESS_LIMIT_SWITCH_HIGH_4_BITS || data[4] == ADDRESS_DOWN_LIMIT_SWITCH)
+		{
+			evaluate_position(data[2], data[4]);
+		}
 	}
 }
 
+void Control::evaluate_position(uint8_t address, uint8_t command) {
+
+}
+
+void Control::evaluate_button(uint8_t address) {
+	if(!moving)
+	{
+		uint8_t addr_led = (ADDRESS_LED_HIGH_4_BITS << 4) |  (address & LOW_4_BITS_MASK);
+		uint8_t addr_led_cabin = (ADDRESS_LED_CABIN_HIGH_4_BITS << 4) |  (address & LOW_4_BITS_MASK);
+		led(addr_led, LED_ON);
+		led(addr_led_cabin, LED_ON);
+		motor_move(100);
+	}
+}
 
 /*
  * @brief function close cabin of elevator and send command to move
  */
-void Control::move(int32_t speed)
+void Control::motor_move(int32_t speed)
 {
 	uint8_t s_d[5];
 	s_d[0] = MOTOR_MOVEMENT;
 	memcpy(&s_d[1], &speed, sizeof(speed));
-	commands.send_command(ADDRESS_CABIN, (uint8_t*)CABIN_LOCK, sizeof(CABIN_LOCK));
-
+	door(CABIN_LOCK);
+	emergency_break(EMERGENCY_BREAK_DEACTIVATE);
 	commands.send_command(ADDRESS_MOTOR, s_d, sizeof(s_d));
+	//moving = true;
 }
 
+void Control::motor_stop() {
+	commands.send_command(ADDRESS_MOTOR, (uint8_t*)MOTOR_STOP, sizeof(uint8_t));
+	door(CABIN_UNLOCK);
+}
 
-void Control::get_position()
-{
+void Control::door(uint8_t command) {
+	commands.send_command(ADDRESS_CABIN, &command, sizeof(uint8_t));
+}
 
+void Control::emergency_break(uint8_t command) {
+	commands.send_command(ADDRESS_EMERGENCY_BREAK, &command, sizeof(uint8_t));
+}
+
+void Control::display(uint8_t command) {
+	commands.send_command(ADDRESS_DISPLAY, &command, sizeof(uint8_t));
+}
+
+void Control::led(uint8_t address, uint8_t command) {
+	commands.send_command(address, &command, sizeof(uint8_t));
+}
+
+void Control::send_to_terminal(uint8_t *text, size_t size) {
+	commands.send_command(ADDRESS_TERMINAL, text, size);
+}
+
+void Control::read_from_terminal(uint8_t *text, size_t size) {
+	printf("\n<MESSAGE FROM ELEVATOR>");
+	for(uint i = 0; i< size; ++i)
+	{
+		printf("%c", text[i]);
+	}
+	printf("\n");
+}
+
+void Control::watchdog(uint8_t command) {
+	commands.send_command(ADDRESS_WATCHDOG_TIMER, &command, sizeof(uint8_t));
 }

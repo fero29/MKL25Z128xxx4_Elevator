@@ -6,11 +6,11 @@ fsl_pit.h:242:20:void PIT_ClearStatusFlags(PIT_Type*, pit_chnl_t, uint32_t)	24	s
 fsl_pit.h:268:20:void PIT_SetTimerPeriod(PIT_Type*, pit_chnl_t, uint32_t)	24	static
 fsl_pit.h:308:20:void PIT_StartTimer(PIT_Type*, pit_chnl_t)	16	static
 fsl_pit.h:322:20:void PIT_StopTimer(PIT_Type*, pit_chnl_t)	16	static
-Mytimer.cpp:12:1:Mytimer::Mytimer()	16	static
-Mytimer.cpp:24:1:Mytimer::~Mytimer()	16	static
-Mytimer.cpp:24:1:virtual Mytimer::~Mytimer()	16	static
-Mytimer.cpp:28:6:void PIT_IRQHandler()	16	static
-Mytimer.cpp:36:6:void Mytimer::timer_handler()	16	static
-Mytimer.cpp:45:6:void Mytimer::start(uint32_t)	32	static
-Mytimer.cpp:50:6:void Mytimer::pause()	16	static
-Mytimer.cpp:55:10:static Mytimer* Mytimer::get_instance()	16	static
+Mytimer.cpp:16:1:Mytimer::Mytimer()	16	static
+Mytimer.cpp:28:1:Mytimer::~Mytimer()	16	static
+Mytimer.cpp:28:1:virtual Mytimer::~Mytimer()	16	static
+Mytimer.cpp:35:6:void PIT_IRQHandler()	16	static
+Mytimer.cpp:46:6:void Mytimer::timer_handler()	16	static
+Mytimer.cpp:59:6:void Mytimer::start(uint32_t)	32	static
+Mytimer.cpp:67:6:void Mytimer::pause()	16	static
+Mytimer.cpp:75:10:static Mytimer* Mytimer::get_instance()	16	static
