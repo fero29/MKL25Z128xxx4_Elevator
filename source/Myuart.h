@@ -14,6 +14,7 @@
 #include <fsl_debug_console.h>
 #include <stdio.h>
 #include <Mytimer.h>
+#include <Hardwareresources.h>
 
 #define DEMO_LPSCI UART0
 #define DEMO_LPSCI_CLKSRC kCLOCK_CoreSysClk
@@ -35,9 +36,11 @@ public:
 	void ring_write(uint8_t* data, size_t size);
 	void ring_get_readed_data(uint8_t* data, size_t size);
 	size_t ring_get_readed_size();
+	void dealy(uint32_t time);
 
 	volatile bool readed_data;
 	volatile uint8_t idle;
+
 
 
 private:

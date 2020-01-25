@@ -1,0 +1,3 @@
+My_led.cpp:10:1:Led::Led()	16	static
+My_led.cpp:21:1:Led::~Led()	16	static
+My_led.cpp:21:1:virtual Led::~Led()	16	static

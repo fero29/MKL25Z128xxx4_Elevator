@@ -221,7 +221,7 @@ void Control::motor_move(int32_t speed)
 	s_d[0] = MOTOR_MOVEMENT;
 	memcpy(&s_d[1], &speed, sizeof(speed));
 	door(CABIN_LOCK);
-	printf(" ");
+	commands.hardvare.dealy(100000);
 	emergency_break(EMERGENCY_BREAK_DEACTIVATE);
 	commands.send_command(ADDRESS_MOTOR, s_d, sizeof(s_d));
 	moving_speed = speed;

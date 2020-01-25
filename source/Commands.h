@@ -9,7 +9,7 @@
 #define COMMANDS_H_
 
 
-#include <Myuart.h>
+#include <Hardwareresources.h>
 
 #define START_BYTE_DATA 0xA0
 #define START_BYTE_ACK 0xA1
@@ -86,7 +86,7 @@ class Commands {
 public:
 	Commands();
 	virtual ~Commands();
-	My_uart* u;
+	Hardware_resources hardvare;
 	uint8_t get_crc_from_msg(uint8_t* data, size_t size);
 	void msg_in_callback();
 	void send_command(uint8_t dest_addr, uint8_t* command, size_t size_command);

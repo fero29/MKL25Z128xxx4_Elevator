@@ -1,0 +1,3 @@
+Led.cpp:10:1:Led::Led()	16	static
+Led.cpp:21:1:Led::~Led()	16	static
+Led.cpp:21:1:virtual Led::~Led()	16	static

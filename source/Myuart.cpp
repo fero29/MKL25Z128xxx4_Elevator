@@ -16,8 +16,7 @@ My_uart* My_uart::instance = 0;
 void My_uart::uart_write(uint8_t *data, size_t size)
 {
 	LPSCI_WriteBlocking(DEMO_LPSCI, data, size);
-	/* create delay betwen mesages*/
-	printf(" ");
+	this->dealy(10000);
 }
 
 /*
@@ -158,3 +157,10 @@ extern "C" void DEMO_LPSCI_IRQHandler(void)
 }
 
 
+void My_uart::dealy(uint32_t time) {
+	volatile uint32_t i = 0;
+	for (i = 0; i < time; ++i)
+	{
+		__asm("NOP"); // delay
+	}
+}

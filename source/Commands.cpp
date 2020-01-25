@@ -11,7 +11,7 @@
  * @brief constructor of object Commands, this object care of sending and reading commands
  */
 Commands::Commands():ringBuffCom(commands_data, RING_BUF_SIZE) {
-	this->u = My_uart::get_instance();
+	//this->u = My_uart::get_instance();
 	message_to_read = false;
 }
 
@@ -19,19 +19,18 @@ Commands::Commands():ringBuffCom(commands_data, RING_BUF_SIZE) {
  * @brief destructor of object Commands
  */
 Commands::~Commands() {
-	delete(u);
 }
 
 /*
  * @brief callback function for incoming messages
  */
 void Commands::msg_in_callback() {
-	if(u->readed_data)
+	if(hardvare.uart->readed_data)
 	{
-		int8_t count = (uint)u->ring_get_readed_size();
+		int8_t count = (uint)hardvare.uart->ring_get_readed_size();
 		uint8_t buf[count];
 		DisableIRQ(DEMO_LPSCI_IRQn);
-		u->ring_get_readed_data(buf, count);
+		hardvare.uart->ring_get_readed_data(buf, count);
 		EnableIRQ(DEMO_LPSCI_IRQn);
 
 
@@ -55,7 +54,7 @@ void Commands::msg_in_callback() {
 			//printf("bad crc\n");
 		}
 
-		u->readed_data = false;
+		hardvare.uart->readed_data = false;
 	}
 }
 
@@ -111,7 +110,7 @@ void Commands::send_ack(uint8_t *readed_data, size_t size)
 void Commands::send_msg(uint8_t *data, size_t size)
 {
 	DisableIRQ(DEMO_LPSCI_IRQn);
-	u->uart_write(data, size);
+	hardvare.uart->uart_write(data, size);
 	EnableIRQ(DEMO_LPSCI_IRQn);
 }
 
