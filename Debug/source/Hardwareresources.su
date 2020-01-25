@@ -1,4 +1,4 @@
 Hardwareresources.cpp:10:1:Hardware_resources::Hardware_resources()	16	static
-Hardwareresources.cpp:15:1:Hardware_resources::~Hardware_resources()	16	static
-Hardwareresources.cpp:15:1:virtual Hardware_resources::~Hardware_resources()	16	static
-Hardwareresources.cpp:19:6:void Hardware_resources::dealy(uint32_t)	24	static
+Hardwareresources.cpp:14:1:Hardware_resources::~Hardware_resources()	16	static
+Hardwareresources.cpp:14:1:virtual Hardware_resources::~Hardware_resources()	16	static
+Hardwareresources.cpp:18:6:void Hardware_resources::dealy(uint32_t)	24	static

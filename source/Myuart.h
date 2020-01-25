@@ -13,7 +13,6 @@
 #include "fsl_lpsci.h"
 #include <fsl_debug_console.h>
 #include <stdio.h>
-#include <Mytimer.h>
 #include <Hardwareresources.h>
 
 #define DEMO_LPSCI UART0

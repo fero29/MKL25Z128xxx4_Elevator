@@ -43,10 +43,9 @@
 #include "stdint.h"
 
 /*My includes*/
-#include <Myuart.h>
 #include <Commands.h>
-#include <Mytimer.h>
 #include <Control.h>
+#include <Hardwareresources.h>
 
 /* object Control for control elevator*/
 
@@ -62,7 +61,10 @@ int main(void) {
 	/* Init FSL debug console. */
 	BOARD_InitDebugConsole();
 
+
 	Control ctrl;
+
+	ctrl.commands.hardvare.led.red_togle();
 
 
 	while (1)

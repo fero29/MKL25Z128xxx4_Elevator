@@ -9,7 +9,6 @@
 
 Hardware_resources::Hardware_resources() {
 	this->uart = My_uart::get_instance();
-
 }
 
 Hardware_resources::~Hardware_resources() {
