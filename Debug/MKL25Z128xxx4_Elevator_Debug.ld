@@ -6,7 +6,7 @@
  * Generated linker script file for MKL25Z128xxx4
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.1.0 [Build 3209] [2019-12-12] on 25.1.2020 0:27:14
+ * MCUXpresso IDE v11.1.0 [Build 3209] [2019-12-12] on 25.1.2020 2:52:21
  */
 
 INCLUDE "MKL25Z128xxx4_Elevator_Debug_library.ld"

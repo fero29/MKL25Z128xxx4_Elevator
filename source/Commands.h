@@ -37,6 +37,7 @@
 #define ADDRESS_DISPLAY 0x30
 #define DISPLAY_UP 0x01
 #define DISPLAY_DOWN 0x02
+#define DISPLAY_CLEAR 0x00
 
 #define ADDRESS_LED_0 0x10
 #define ADDRESS_LED_1 0x11
